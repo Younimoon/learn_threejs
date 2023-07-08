@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "./three.js-master/build/three.module.js"
+        }
+    }
+</script>
+<script type="module"> 
+    import * as THREE from 'three'
+
+    const Scene = new THREE.Scene()
+    const geometry = new  THREE.BoxGeometry(100,100,100)
+    const material = new THREE.MeshBasicMaterial({
+        color:0xffeeee,
+        transparent:true,//开启透明度
+        opacity:0.7
+    })
+    const mesh = new THREE.Mesh(geometry,material)
+    mesh.position.set(0,0,0)
+    mesh.position.x = 50
+    Scene.add(mesh) 
+    const axesHelper = new THREE.AxesHelper(100);
+    Scene.add(axesHelper);
+
+    const width = 800
+    const height  = 500
+    const  camere = new THREE.PerspectiveCamera(30,width/height,0.1,2000)
+    camere.position.set(200,200,200)
+    camere.lookAt(mesh.position)
+    const renderer = new THREE.WebGLRenderer()
+    renderer.setSize(width,height)
+    renderer.render(Scene,camere)
+    document.body.appendChild(renderer.domElement)
+
+
+
+</script>
+</html>

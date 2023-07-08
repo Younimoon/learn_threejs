@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "./three.js-master/build/three.module.js"
+        }
+    }
+</script>
+<script type="module"> 
+    import * as THREE from 'three'
+
+    const Scene = new THREE.Scene()
+    //给三维场景添加物体
+    //添加形状
+
+    //定义一个几何体
+    const geometry = new  THREE.BoxGeometry(100,100,100)
+    //定义材质
+    const material = new THREE.MeshBasicMaterial({
+        color:0xff0000,
+    })
+
+    // 添加网格模型（就是添加物体）
+    const mesh = new THREE.Mesh(geometry,material)
+
+    //设置模型的位置（默认就是0，0，0）
+    mesh.position(100,100,100)
+    //将物体添加到场景
+    Scene.add(mesh)
+
+    // ----------------第三课------------------------------
+
+    //创建一个透视投影相机对象 
+    //设置相机的4个参数(角度，宽高比，近端面距离相机的距离，远端面距离相机的距离)
+    const  camere = new THREE.PerspectiveCamera(30,width/height,0.1,2000)
+    //设置相机位置
+    camere.position.set(200,200,200)
+    //相机的观察目标
+    // camere.lookAt(0,0,0)
+
+    //指向网格模型
+    camere.lookAt(mesh.position)
+
+    //定义渲染的大小（相当于照片的大小）
+    const width = 800
+    const height  = 500
+
+   
+
+
+</script>
+</html>
