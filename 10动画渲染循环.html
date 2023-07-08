@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script type="importmap">
+    {
+        "imports": {
+            "three": "./three.js-master/build/three.module.js",
+            "three/addons/":"../../../three.js-master/examples/jsm/"
+        }
+    }
+</script>
+<script type="module"> 
+    // 模型选装：拖动鼠标左键
+    // 缩放：滚动鼠标中键
+    // 平移：拖动鼠标右键
+    import * as THREE from 'three'
+    import {OrbitControls} from 'three/addons/controls/OrbitControls.js'
+
+    const Scene = new THREE.Scene()
+    const geometry = new  THREE.BoxGeometry(100,100,100)
+    // MeshBasicMaterial 不受光照影响
+    // MeshaLamberMaterail 受光照影响
+    const material = new THREE.MeshLambertMaterial({
+        color:0x00ffff,
+        transparent:true,//开启透明度
+        opacity:0.7
+    })
+    const mesh = new THREE.Mesh(geometry,material)
+    mesh.position.set(0,0,0)
+    // mesh.position.x = 50
+    Scene.add(mesh) 
+    const axesHelper = new THREE.AxesHelper(100);
+    Scene.add(axesHelper);
+    //创建一个点光源(相当于灯泡，只能照到面向灯泡的那几个面)
+    const pointLight = new THREE.PointLight(0xffffff,1,0)
+    //设置点光源的位置
+    pointLight.position.set(400,200,200)
+    // 添加光源
+    // Scene.add(pointLight)
+    //点光源光源辅助对象，第一个是要辅助的对象，第二个是尺寸（里面可以有很多个参数，这里值演示是两个必传参数）
+    const sphereSize = 10
+    const pointLightHelper = new THREE.PointLightHelper( pointLight, sphereSize );
+    // Scene.add( pointLightHelper );
+
+
+    //创建平行光
+    const directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+    directionalLight.position.set(200, 50,0)
+    //set是该光线的位置，
+    directionalLight.target = mesh
+    //target是指向的该平行光被指向的位置
+    Scene.add( directionalLight );
+    //平行光辅助对象(将光线可视化出来形成一条射线,是条)
+    const helper = new THREE.DirectionalLightHelper( directionalLight, 10 );
+    Scene.add(helper)
+
+    //添加一个环境光(相当于大自然的光线，可以照到物体的所有面)
+    const light = new THREE.AmbientLight( 0x404040 ); // soft white light
+    Scene.add( light );
+
+    const width = 800
+    const height  = 500
+    const  camera = new THREE.PerspectiveCamera(30,width/height,0.1,2000)
+    camera.position.set(300,300,300)
+    camera.lookAt(mesh.position)
+    const renderer = new THREE.WebGLRenderer()
+    renderer.setSize(width,height)
+    // renderer.render(Scene,camera)
+    document.body.appendChild(renderer.domElement)
+
+    //创建一个相机控件对象
+    //第一个相机，监控范围
+    const controls = new OrbitControls( camera, renderer.domElement );
+    //监听control
+    controls.addEventListener('change',function(){
+        // console.log('position',camera.position);
+        renderer.render(Scene,camera)
+    })
+
+    //渲染帧率：每秒钟渲染多少次
+    let i = 0
+    //创建时钟对象
+    // const clock = new THREE.Clock()
+    function ender(){
+        // const spt = clock.getDelta()*1000
+        // console.log('函数调用时间',spt);
+        mesh.rotateY(0.01)
+        renderer.render(Scene,camera)
+        requestAnimationFrame(ender)
+    }
+    ender()
+
+</script>
+</html> 

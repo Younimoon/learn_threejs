@@ -6,8 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+</style>
 <body>
-    
+    <div id="webgl" class="webgl"></div>
 </body>
 <script type="importmap">
     {
@@ -21,10 +28,8 @@
 
     const Scene = new THREE.Scene()
     const geometry = new  THREE.BoxGeometry(100,100,100)
-    // MeshBasicMaterial 不受光照影响
-    // MeshaLamberMaterail 受光照影响
     const material = new THREE.MeshBasicMaterial({
-        color:0x00ffff,
+        color:0xffeeee,
         transparent:true,//开启透明度
         opacity:0.7
     })
@@ -35,17 +40,33 @@
     const axesHelper = new THREE.AxesHelper(100);
     Scene.add(axesHelper);
 
-    const width = 800
-    const height  = 500
-    const  camere = new THREE.PerspectiveCamera(30,width/height,0.1,2000)
+    let width = window.innerWidth
+    let height  = window.innerWidth
+    let  camere = new THREE.PerspectiveCamera(3000,width/height,0.1,2000)
     camere.position.set(200,200,200)
     camere.lookAt(mesh.position)
     const renderer = new THREE.WebGLRenderer()
     renderer.setSize(width,height)
     renderer.render(Scene,camere)
     document.body.appendChild(renderer.domElement)
+    document.getElementById('webgl').appendChild(renderer.domElement)
 
+    //窗口变化时间
+    window.onresize = function(){
 
+        //更新canvas画布的尺寸
+        console.log(window);
+        // width =window.innerWidth
+        // height = window.innerHeight
+        // camere = new THREE.PerspectiveCamera(3000,width/height,0.1,2000)
+        renderer.setSize(window.innerWidth,window.innerHeight)
+        camere.aspect = window.innerWidth/window.innerHeight
+        camere.updateProjectionMatrix()
+        // renderer.setSize(width,height)
+        // renderer.render(Scene,camere)
+        // document.getElementById('webgl').appendChild(renderer.domElement)
+
+    }
 
 </script>
 </html>
